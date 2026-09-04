@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDEN - Home</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;color:white;max-width:700px;margin:auto;padding-bottom:95px;background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('home.jpg') center/cover fixed no-repeat;min-height:100vh;}
+.header{padding:18px 15px;display:flex;justify-content:space-between;align-items:center;background:rgba(12,22,16,0.9);border-bottom:1.5px solid #0fb36a;position:sticky;top:0;z-index:20;}
+.logo{font-weight:900;letter-spacing:5px;font-size:18px;color:#0fb36a;}
+.icon-btn{width:36px;height:36px;border-radius:50%;background:rgba(15,179,106,0.15);border:1px solid #0fb36a;display:flex;align-items:center;justify-content:center;color:#0fb36a;}
+.wallet-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:15px;}
+.w-card{border-radius:16px;padding:18px;text-align:center;cursor:pointer;transition:0.2s;}
+.w-card:active{transform:scale(0.97);}
+.w-card h4{font-size:10px;letter-spacing:2px;margin-bottom:6px;}
+.w-card h2{font-size:22px;font-weight:900;}
+.w-card p{font-size:9px;margin-top:8px;opacity:0.8;}
+.wallet{ background: linear-gradient(135deg, rgba(10,122,66,0.95), rgba(15,179,106,0.75)); border:1.5px solid #0fb36a; box-shadow:0 0 15px rgba(15,179,106,0.3);}
+.balance{ background: rgba(12,22,16,0.92); border:1.5px solid #ffcc00; box-shadow:0 0 15px rgba(255,204,0,0.15);}
+.balance.locked{ opacity:0.5; filter:grayscale(0.5); cursor:not-allowed; border-color:#777; }
+.balance.locked h4,.balance.locked h2{color:#777;}
+.balance h4,.balance h2{color:#ffcc00;}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;padding:0 15px;margin-top:10px;}
+.m-item{background: rgba(12,22,16,0.88);border:1px solid rgba(15,179,106,0.3);border-radius:12px;padding:14px 5px;text-align:center;cursor:pointer;}
+.m-item i{color:#0fb36a;font-size:18px;display:block;margin-bottom:6px;}
+.m-item span{font-size:9px;font-weight:700;letter-spacing:0.5px;}
+.banner{margin:15px;padding:14px;background: linear-gradient(135deg, rgba(10,122,66,0.9), rgba(0,0,0,0.6));border:1px solid #0fb36a;border-radius:12px;display:flex;justify-content:space-between;align-items:center;}
+.banner button{background:#ffcc00;color:#111;border:none;padding:8px 14px;border-radius:20px;font-weight:900;font-size:11px;cursor:pointer;}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;background: rgba(18,18,22,0.98);display:flex;justify-content:space-around;padding:12px 0 18px;border-top:1px solid rgba(255,255,255,0.08);}
+.nav-item{text-align:center;color:#777;font-size:10px;text-decoration:none;}
+.nav-item i{display:block;font-size:18px;margin-bottom:5px;}
+.nav-item.active{color:#0fb36a;}
+.insufficient-overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:1000; align-items:center; justify-content:center; padding:20px; }
+.insufficient-box{ width:100%; max-width:380px; background: linear-gradient(135deg, rgba(12,22,16,0.98), rgba(10,35,18,0.98)); border:2px solid #0fb36a; border-radius:18px; padding:22px; box-shadow:0 0 30px rgba(15,179,106,0.5), inset 0 0 20px rgba(15,179,106,0.1); text-align:center; animation:popIn 0.3s ease; }
+@keyframes popIn{ from{transform:scale(0.85); opacity:0;} to{transform:scale(1); opacity:1;} }
+.insufficient-box .icon{ width:60px; height:60px; margin:0 auto 12px; background: rgba(255,59,59,0.15); border:2px solid #ff6b6b; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; color:#ff6b6b; }
+.insufficient-box h3{ color:#ff6b6b; letter-spacing:1px; margin-bottom:8px; }
+.insufficient-box .detail{ background:rgba(0,0,0,0.4); border:1px solid rgba(15,179,106,0.3); border-radius:10px; padding:12px; margin:12px 0; font-size:12px; line-height:1.6; text-align:left; }
+.insufficient-box .detail b{ color:#0fb36a; }
+.insufficient-box .btn-green{ width:100%; padding:13px; background: linear-gradient(135deg,#0a7a42,#0fb36a); border:none; border-radius:30px; color:white; font-weight:900; cursor:pointer; margin-top:10px; letter-spacing:1px; }
+.insufficient-box .btn-outline{ width:100%; padding:12px; background:transparent; border:1.5px solid #0fb36a; border-radius:30px; color:#0fb36a; font-weight:800; cursor:pointer; margin-top:8px; }
+</style>
+</head>
+<body>
+<div class="header"><div class="logo">EDEN</div><div style="display:flex;gap:10px;"><div class="icon-btn" onclick="location.href='mine.html?open=transactions'"><i class="fa-solid fa-bell"></i></div><div class="icon-btn" onclick="location.href='team.html'"><i class="fa-solid fa-headset"></i></div></div></div>
+<div class="wallet-row">
+  <div class="w-card wallet" onclick="location.href='mine.html?open=deposit'"><h4>WALLET</h4><h2>UGX <span id="walletAmt">0</span></h2><p>Deposit Money - Tap to Add <i class="fa-solid fa-plus"></i></p></div>
+  <div class="w-card balance" id="balanceCard" onclick="handleWithdrawClick()"><h4>BALANCE</h4><h2>UGX <span id="balanceAmt">0</span></h2><p id="balanceSubText">Earnings - Tap to Withdraw <i class="fa-solid fa-arrow-up"></i></p></div>
+</div>
+<div class="menu-grid">
+  <div class="m-item" onclick="location.href='Products.html'"><i class="fa-solid fa-bag-shopping"></i><span>Products</span></div>
+  <div class="m-item" onclick="location.href='mine.html?open=deposit'"><i class="fa-solid fa-arrow-down"></i><span>Deposit</span></div>
+  <div class="m-item" onclick="handleWithdrawClick()"><i class="fa-solid fa-arrow-up"></i><span>Withdraw</span></div>
+  <div class="m-item" onclick="location.href='team.html'"><i class="fa-solid fa-users"></i><span>Team</span></div>
+</div>
+<div class="banner"><div><b style="font-size:13px;">Daily Check-In</b><br><small style="opacity:0.7;font-size:11px;">Get UGX 200 daily bonus</small></div><button onclick="dailyCheck()">CLAIM UGX 200</button></div>
+<div style="padding:0 15px;margin-top:15px;"><h3 style="font-size:14px;letter-spacing:1px;margin-bottom:10px;">HOT PRODUCTS <span style="color:#0fb36a;font-size:11px;float:right;cursor:pointer;" onclick="location.href='Products.html'">See All ></span></h3><div id="hotList" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:10px;"></div></div>
+<div class="bottom-nav"><a class="nav-item active" href="index.html"><i class="fa-solid fa-house"></i>Home</a><a class="nav-item" href="Products.html"><i class="fa-solid fa-bag-shopping"></i>Product</a><a class="nav-item" href="team.html"><i class="fa-solid fa-users"></i>Team</a><a class="nav-item" href="mine.html"><i class="fa-solid fa-user"></i>Mine</a></div>
+
+<div id="insufficientOverlay" class="insufficient-overlay" onclick="if(event.target===this) closeBanner()">
+  <div class="insufficient-box">
+    <div class="icon"><i class="fa-solid fa-wallet"></i></div>
+    <h3 id="bannerTitle">INSUFFICIENT BALANCE</h3>
+    <p id="bannerMsg" style="font-size:12px;opacity:0.8;">Your wallet is low</p>
+    <div class="detail" id="bannerDetail"></div>
+    <button class="btn-green" id="bannerMainBtn" onclick="location.href='mine.html?open=deposit'"><i class="fa-solid fa-arrow-down"></i> DEPOSIT NOW</button>
+    <button class="btn-outline" onclick="closeBanner()">CLOSE</button>
+  </div>
+</div>
+
+<script>
+// ===== UNIQUE INVITE CODE SYSTEM =====
+function generateInviteCode(){
+  let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let rand = "";
+  for(let i=0;i<6;i++) rand += chars.charAt(Math.floor(Math.random()*chars.length));
+  return `EDEN-${rand}`; // e.g. EDEN-7XQ9K2
+}
+
+// Capture invite from URL ?invite=CODE
+const urlParamsInvite = new URLSearchParams(window.location.search);
+const inviteFromUrl = urlParamsInvite.get('invite');
+if(inviteFromUrl){
+  localStorage.setItem('eden_invited_by', inviteFromUrl);
+}
+
+// Create user if not exists with UNIQUE code
+let user = JSON.parse(localStorage.getItem('eden_user')||'null');
+if(!user){
+  let newCode = generateInviteCode();
+  user = {
+    phone: "07" + Math.floor(10000000 + Math.random()*89999999), // temp random phone until register
+    myInviteCode: newCode,
+    invitedBy: localStorage.getItem('eden_invited_by') || null,
+    createdAt: new Date().toISOString()
+  };
+  localStorage.setItem('eden_user', JSON.stringify(user));
+} else {
+  // Ensure old users get a unique code if they had EDEN2026
+  if(user.myInviteCode === "EDEN2026" || !user.myInviteCode){
+    user.myInviteCode = generateInviteCode();
+    localStorage.setItem('eden_user', JSON.stringify(user));
+  }
+}
+
+let homeData = JSON.parse(localStorage.getItem('eden_home_data')||'{"wallet":0,"balance":0,"earnings":0,"hasDeposited":false,"firstBonusClaimed":false}');
+
+if(!homeData.firstBonusClaimed){
+  homeData.balance = (homeData.balance||0) + 2000;
+  homeData.earnings = (homeData.earnings||0) + 2000;
+  homeData.firstBonusClaimed = true;
+  if(homeData.hasDeposited === undefined) homeData.hasDeposited = false;
+  localStorage.setItem('eden_home_data',JSON.stringify(homeData));
+  setTimeout(()=> {
+    showBanner("WELCOME BONUS!","UGX 2,000 Added to Your Account!","<b style='color:#0fb36a;'>+ UGX 2,000</b> welcome bonus has been added to your <b>BALANCE</b>.<br><br>Your invite code: <b style='color:#ffcc00;'>"+user.myInviteCode+"</b><br><br>Share: <b>eden.com/?invite="+user.myInviteCode+"</b><br><br>Withdraw will unlock after your first deposit.", true);
+  }, 600);
+}
+
+function refreshHome(){ 
+  document.getElementById('walletAmt').innerText=(homeData.wallet||0).toLocaleString(); 
+  document.getElementById('balanceAmt').innerText=(homeData.balance||0).toLocaleString();
+  let balCard = document.getElementById('balanceCard');
+  let sub = document.getElementById('balanceSubText');
+  if(!homeData.hasDeposited){
+    balCard.classList.add('locked');
+    sub.innerHTML = 'Locked - Deposit First <i class="fa-solid fa-lock"></i>';
+  } else {
+    balCard.classList.remove('locked');
+    sub.innerHTML = 'Earnings - Tap to Withdraw <i class="fa-solid fa-arrow-up"></i>';
+  }
+}
+refreshHome();
+
+let products=[{name:"EDEN Starter",warranty:"15,000",price:"3,000",photo:"edenstarter.jpg"},{name:"EDEN Pro",warranty:"30,000",price:"6,000",photo:"edenpro.jpg"},{name:"EDEN Max",warranty:"50,000",price:"8,000",photo:"edenmax.jpg"}];
+let hot=document.getElementById('hotList');
+products.forEach(p=>{ hot.innerHTML+=`<div style="min-width:130px;background:rgba(12,22,16,0.9);border:1px solid #0fb36a;border-radius:12px;padding:10px;text-align:center;" onclick="location.href='Products.html'"><img src="${p.photo}" style="width:100%;height:70px;object-fit:cover;border-radius:8px;"><div style="font-size:11px;margin:6px 0;font-weight:800;color:#0fb36a;">${p.name}</div><div style="font-size:10px;">UGX ${p.warranty}</div><div style="font-size:9px;color:#ffcc00;margin-top:3px;">Daily ${p.price}</div></div>`; });
+
+function dailyCheck(){ let last=localStorage.getItem('eden_last_check'); let today=new Date().toDateString(); if(last===today){ showBanner("ALREADY CLAIMED","You already claimed today!","<b>Come back tomorrow</b> for UGX 200 bonus to your BALANCE."); return; } homeData.balance=(homeData.balance||0)+200; homeData.earnings=(homeData.earnings||0)+200; localStorage.setItem('eden_home_data',JSON.stringify(homeData)); localStorage.setItem('eden_last_check',today); refreshHome(); showBanner("SUCCESS!","UGX 200 Claimed!","<b style='color:#0fb36a;'>+ UGX 200</b> added to your <b>BALANCE</b> (earnings).", true); }
+
+function handleWithdrawClick(){
+  if(!homeData.hasDeposited){
+    showBanner("DEPOSIT REQUIRED","Withdraw Locked","<b>Withdraw is only active after your initial deposit.</b><br><br>Please make a deposit of any amount to unlock withdrawals.<br><br>Your welcome bonus of <b>UGX 2,000</b> is already in your balance and will be withdrawable after deposit.", false);
+    document.getElementById('bannerMainBtn').innerHTML = '<i class="fa-solid fa-arrow-down"></i> DEPOSIT TO UNLOCK';
+    return;
+  }
+  location.href='mine.html?open=withdraw';
+}
+
+function showBanner(title,msg,detail,isSuccess=false){ document.getElementById('bannerTitle').innerText=title; document.getElementById('bannerTitle').style.color=isSuccess?"#0fb36a":"#ff6b6b"; document.getElementById('bannerMsg').innerText=msg; document.getElementById('bannerDetail').innerHTML=detail; document.getElementById('insufficientOverlay').style.display="flex"; }
+function closeBanner(){ document.getElementById('insufficientOverlay').style.display="none"; }
+</script>
+</body>
+</html>
